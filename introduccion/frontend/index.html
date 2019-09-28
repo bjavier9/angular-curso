@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+        <div class="container" id="app">
+                <div class="py-5 text-center">
+                  <h2>Checkout form</h2>
+                  <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+                </div>
+              
+                <div class="row">
+                  <div class="col-md-4 order-md-2 mb-4">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                      <span class="text-muted">Your cart</span>
+                      <span class="badge badge-secondary badge-pill">3</span>
+                    </h4>
+                    <span v-html="alerta"></span>
+                    <ul class="list-group mb-3">
+                      <li class="list-group-item d-flex justify-content-between lh-condensed" v-for="(i, index) in data" :key="index">
+                            <div>
+                                    <h6 class="my-0">{{i.title}}</h6>
+                                    <small class="text-muted">{{i.description}}</small>
+                                  </div>
+                                  <span class="text-muted">
+                                      <img :src="i.image" height="12" width="12">
+                                      <button type="button" class="btn btn-warning btn-sm" @click="editar(i.id)" >Editar</button>
+<button @click="borrar(i.id)" class="btn btn-danger btn-sm">Borrar</button>
+
+                                  </span>
+                        
+                      </li>
+                      
+                      
+                    </ul>
+              
+                 
+                  </div>
+                  <div class="col-md-8 order-md-1">
+                    <h4 class="mb-3">Billing address</h4>
+                    <!-- <enviar-data edit="edit"></enviar-data> -->
+                    <form>
+                            <div class="row">
+                              <div class="col-md-6 mb-3">
+                                <label for="firstName">Titulo</label>
+                                <input type="text" class="form-control" id="firstName" v-model="title"  autocomplete="off">
+                                <div class="invalid-feedback">
+                                  Valid first name is required.
+                                </div>
+                              </div>
+                              <div class="col-md-6 mb-3">
+                                <label for="lastName">descripcion</label>
+                                <input type="text" class="form-control"  placeholder="" v-model="description"  autocomplete="off" >
+                                
+                              </div>
+                            </div>
+                    
+                            <div class="mb-3">
+                              <label for="username">Imagen-Url</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">@</span>
+                                </div>
+                                <input type="text" class="form-control" v-model="image"  autocomplete="off">
+                               
+                              </div>
+                            </div>
+                            <div v-if="edit==true">
+                                  <a href="javascript://" @click="enveditar" class="btn btn-primary">editar</a href="javascript://">
+                          </div> 
+                          <div v-else>
+                              <a href="javascript://" @click="enviar" class="btn btn-primary">Enviar</a>
+                          </div>
+                            
+                          </form>
+                  </div>
+                </div>
+              
+                <footer class="my-5 pt-5 text-muted text-center text-small">
+                  <p class="mb-1">© 2017-2019 Company Name</p>
+                  <ul class="list-inline">
+                    <li class="list-inline-item"><a href="#">Privacy</a></li>
+                    <li class="list-inline-item"><a href="#">Terms</a></li>
+                    <li class="list-inline-item"><a href="#">Support</a></li>
+                  </ul>
+                </footer>
+              </div>
+    <!-- <p id="mio"></p>
+    <div id="app">
+        <input type="text" v-model="message" id="mensaje"> <br>
+        <button @click="tocame"> tocame</button>
+        <p>{{message}}</p>
+        <p>{{hola}}</p>
+    </div> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        
+//         Vue.component('enviar-data', {
+//   props:['edit'],
+// //   v-on:submit.prevent="enviar"
+//   template: `  `,
+//                     data(){
+//                         return {
+                         
+//                         }
+//                     },
+//                     methods:{
+                      
+//                     }
+// })
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                data:'',
+                alert: false,
+                alert_desc:'',
+                edit:false,
+                image:'',
+                            description:'',
+                            title:''
+            },
+            beforeCreate() {
+
+                console.log('soy before created')
+            },
+            created() {
+              this.leer();
+                console.log(this.message)
+
+            },
+            mounted() {
+                this.tocame()
+                console.log(this.message)
+            },
+            methods: {
+                
+                enveditar(id){
+                    let data = {
+        image:this.image,
+        description:this.description,
+        title:this.title
+    }
+                    axios.put('http://localhost:3000/api/games/'+id,data, 
+{ headers: { 'Content-type': 'application/json' } }).then(e=>{
+console.log(e.data)
+this.image="";
+this.description="";
+this.title="";
+this.edit=false;
+}).catch(e=>{
+console.log(e.response)
+})
+                },
+                
+enviar(){
+    let data = {
+        image:this.image,
+        description:this.description,
+        title:this.title
+    }
+    axios.post('http://localhost:3000/api/games/',data, 
+{ headers: { 'Content-type': 'application/json' } }).then(e=>{
+console.log(e.data)
+this.image="";
+this.description="";
+this.title="";
+}).catch(e=>{
+console.log(e.response)
+})
+},
+               editar(id){
+                this.edit = true
+                axios.get('http://localhost:3000/api/games/'+id, 
+                { headers: { 'Content-type': 'application/json' } })
+                .then(e => {
+                    console.log(e.data)
+                  this.title=e.data.title;
+                  this.description= e.data.description;
+                  this.image= e.data.image;
+                })
+               },
+                leer(){
+                    axios.get('http://localhost:3000/api/games/', 
+                { headers: { 'Content-type': 'application/json' } })
+                .then(e => {
+                    console.log(e.data)
+                    this.data = e.data
+                })
+                },
+                borrar(id){
+                    console.log(id)
+                    axios.delete('http://localhost:3000/api/games/'+id, 
+                { headers: { 'Content-type': 'application/json' } }).then(e=>{
+                    this.leer()
+                   this.alert=true,
+                this.alert_desc=e.data.message
+                    console.log(e.data)
+                })
+                },
+                tocame() {
+                    //    alert(this.message)
+                }
+            },
+            computed: {
+                alerta(){
+if(this.alert)
+                  return `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    ${this.alert_desc}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>`  ;
+return null;
+                },
+                hola() {
+
+                    return "Hola desde propiedad computada"
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
